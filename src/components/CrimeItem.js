@@ -14,19 +14,19 @@ const CrimeItem = ({ crime }) => {
       }}
     >
       <ListItemText
-        primary={crime.description}
-        secondary={crime.time}
+        primary={crime.report.substring(0,75)}
+        secondary={new Date(crime.created_at).toDateString()}
         style={{ flex: '1' }}
       />
       <div
         style={{
-          backgroundColor: crime.status === 'Active' ? '#e57373' : '#81c784',
+          backgroundColor: crime.status === 'Active' ? '#81c784' : 'red',
           color: '#fff',
           padding: '5px 10px',
           borderRadius: '5px',
         }}
       >
-        {crime.status}
+        {crime.status || "Unattended"}
       </div>
     </ListItem>
   );

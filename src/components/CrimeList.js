@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CrimeItem from './CrimeItem';
+import FullReport from './FullReport'; // Import the FullReport component
 
 const crimeData = [
   {
@@ -20,6 +22,21 @@ const crimeData = [
 ];
 
 const CrimeList = () => {
+  const [selectedCrime, setSelectedCrime] = useState(null);
+const [crimeData, setCrimeData] = useState([])
+
+useEffect(()=>{
+  fetch('https://vigilance.onrender.com/api/reports').then(res=>{
+    // setCrimeData(data)
+    console.log(res)
+    return res.json()
+  }).then(data=>setCrimeData(data.data))
+}, [])
+
+  const handleCrimeClick = (crime) => {
+    setSelectedCrime(crime);
+  };
+
   return (
     <div
       style={{
@@ -34,22 +51,29 @@ const CrimeList = () => {
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <h2>Crime List</h2>
       </div>
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-          <div style={{ flex: 3 }}>
-            <strong>Description</strong>
+      {selectedCrime ? (
+        <FullReport crime={selectedCrime} onClose={() => setSelectedCrime(null)} />
+      ) : (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div style={{ flex: 8 }}>
+              <strong>Description</strong>
+            </div>
+            <div style={{ flex: 1 }}>
+              <strong>Status</strong>
+            </div>
           </div>
-          <div style={{ flex: 3 }}>
-            <strong>Location</strong>
-          </div>
-          <div style={{ flex: 2 }}>
-            <strong>Status</strong>
-          </div>
+          {crimeData.map(crime => (
+            <div
+              key={crime.id}
+              onClick={() => handleCrimeClick(crime)}
+              style={{ textDecoration: 'none', cursor: 'pointer' }}
+            >
+              <CrimeItem crime={crime} />
+            </div>
+          ))}
         </div>
-        {crimeData.map(crime => (
-          <CrimeItem key={crime.id} crime={crime} />
-        ))}
-      </div>
+      )}
     </div>
   );
 };

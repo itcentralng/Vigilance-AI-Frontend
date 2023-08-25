@@ -1,21 +1,23 @@
 import React from 'react';
-import Sidebar from './components/Sidebar'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
 import CrimeList from './components/CrimeList';
+import FullReport from './components/FullReport'; // Import the FullReport component
 
-function App() {
+const App = () => {
   return (
-    <div 
-      style={{ 
-        display: 'flex', 
-        backgroundColor: "#f1f1f1", 
-        flex: "1",
-        width: "100%",
-        height: "100vh"
-      }}>
-      <Sidebar />
-      <CrimeList />
-    </div>
+    // <Router>
+      <div style={{ display: 'flex' }}>
+        <Sidebar />
+        {/* <Switch> */}
+          <Routes>
+          <Route path="/" element={<CrimeList/>} />
+          <Route path="/reports/:id" element={FullReport} />
+          </Routes>
+        {/* </Switch> */}
+      </div>
+    // </Router>
   );
-}
+};
 
 export default App;
